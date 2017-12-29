@@ -10,6 +10,10 @@ var users = require('./routes/users');
 
 var app = express();
 
+var dishRouter = require('./routes/dishRouter');
+var promoRouter = require('./routes/promoRouter');
+var leaderRouter = require('./routes/leaderRouter');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -31,6 +35,11 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+//routers
+app.use('/dishes',dishRouter);
+app.use('/promotions',promoRouter);
+app.use('/leaders',leaderRouter);
 
 // error handler
 app.use(function(err, req, res, next) {
