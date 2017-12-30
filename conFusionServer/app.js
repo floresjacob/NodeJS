@@ -14,6 +14,23 @@ var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
 
+const mongoose = require('mongoose');
+mongoose.Promise = require('bluebird');
+
+const Dishes = require('./models/dishes');
+
+// Connection URL
+const url = 'mongodb://localhost:27017/conFusion';
+const connect = mongoose.connect(url, {
+    //Mongo 5 no longer requires useMongoClient: https://stackoverflow.com/questions/48031029/the-options-usemongoclient-is-not-supported
+    // useMongoClient: true,
+    /* other options */
+  });
+
+connect.then((db) => {
+    console.log("Connected correctly to server");
+}, (err) => { console.log(err); });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,6 +45,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/dishes',dishRouter);
+app.use('/promotions',promoRouter);
+app.use('/leaders',leaderRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -36,10 +56,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-//routers
-app.use('/dishes',dishRouter);
-app.use('/promotions',promoRouter);
-app.use('/leaders',leaderRouter);
 
 // error handler
 app.use(function(err, req, res, next) {
