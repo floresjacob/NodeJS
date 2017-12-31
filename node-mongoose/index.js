@@ -3,6 +3,10 @@ mongoose.Promise = require('bluebird');
 
 const Dishes = require('./models/dishes');
 
+require('mongoose-currency').loadType(mongoose);
+
+var Currency = mongoose.Types.Currency;
+
 const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url, {
     useMongoClient: true
