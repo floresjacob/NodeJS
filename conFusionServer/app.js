@@ -10,8 +10,10 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var session = require('express-session');
 var FileStore = require('session-file-store')(session);
+var config = require('./config');
 
 var app = express();
+const url = config.mongoUrl;
 
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
@@ -25,7 +27,7 @@ const Dishes = require('./models/dishes');
 
 
 // Connection URL
-const url = 'mongodb://localhost:27017/conFusion';
+// const url = 'mongodb://localhost:27017/conFusion';
 const connect = mongoose.connect(url, {
     //Mongo 5 no longer requires useMongoClient: https://stackoverflow.com/questions/48031029/the-options-usemongoclient-is-not-supported
     // useMongoClient: true,
@@ -62,22 +64,6 @@ app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
-
-function auth (req, res, next) {
-    console.log(req.user);
-
-    if (!req.user) {
-      var err = new Error('You are not authenticated!');
-      res.setHeader('WWW-Authenticate', 'Basic');
-      err.status = 401;
-      next(err);
-    }
-    else {
-          next();
-    }
-}
-
-app.use(auth);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
