@@ -14,6 +14,7 @@ var config = require('./config');
 
 var app = express();
 const url = config.mongoUrl;
+const uploadRouter = require('./routes/uploadRouter');
 
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
@@ -21,6 +22,8 @@ var leaderRouter = require('./routes/leaderRouter');
 
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
+
+
 
 const Dishes = require('./models/dishes');
 
@@ -58,6 +61,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//uploadRouter
+app.use('/imageUpload',uploadRouter);
 
 //authorization
 app.use(session({
